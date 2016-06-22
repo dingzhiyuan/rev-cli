@@ -1,0 +1,49 @@
+{
+  "author": {
+    "email": "idingzhiyuan@qq.com",
+    "name": "dingzhiyuan",
+    "url": "https://github.com/dingzhiyuan/"
+  },
+  "bin": {
+    "rev": "rev-cli.js"
+  },
+  "bugs": {
+    "url": "https://github.com/dingzhiyuan/rev-cli/issues"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "commander": "^2.5.1",
+    "md5":"2.1.0"
+  },
+  "description": "rev line tool",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "91d0f6f77802644af359fbf2380e824ca89e9831",
+    "tarball": "https://registry.npmjs.org/rev-cli/-/rev-cli-1.0.0.tgz"
+  },
+  "homepage": "https://github.com/dingzhiyuan/rev-cli",
+  "keywords": [
+    "rev",
+    "cli",
+    "commandline"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "email": "idingzhiyuan@qq.com",
+      "name": "imbigd"
+    }
+  ],
+  "name": "rev-cli",
+  "main": "index.js",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dingzhiyuan/rev-cli.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.5"
+}
