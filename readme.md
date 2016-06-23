@@ -31,6 +31,35 @@ cd you website folder
 
 it will use default options.and  it will use file's md5 string as version string; 
 
+##Other way
+
+`
+
+var rev=require("rev-cli");
+
+rev({
+
+    base:'',//this base path relative to cwd, if it empty ,it will use the cwd as the root of the website
+
+    dist:"rev_build",//the folder to write the rev files,beifore execute "rev" ,this folder will be clean
+
+    public:"",//public resource folder
+
+    version:null,
+
+    excludes:[]//folder or files do not execute "rev" 
+
+    propWhiteList:[],more attr to match in html and js files,defauts "src" and "href",if you want more add it
+
+    repExcludes:[],//folder or files do not execute "replace url" 
+
+    replacements:{
+    }//file path or folder path to replace eg  "style":"http://www.xxx.com/style"
+    
+})
+
+`
+
 ## Default options
 
 
@@ -55,18 +84,19 @@ it will use default options.and  it will use file's md5 string as version string
     }//file path or folder path to replace eg  "style":"http://www.xxx.com/style"
 }`
 
-warning: it will replace the path in accordance with the order.
 
 but you can create a "rev.json" file in the cwd folder to rewrite the options
 
 ## About replacements
+warning: it will replace the path in accordance with the order.
 
 if we have a config like :
+
 `replacements:{
 	
 	"style":"http://www.xxx.com/style",
 
-	"js":"http://www.xxx.com/style"
+	"js":"http://www.xxx.com/js"
 
 }`
 

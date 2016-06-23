@@ -44,8 +44,9 @@ Replace.prototype.assembly=function(base,path,_replacements){
 	    }else{
 	    	_obj[getPath(re,/\./.test(re)?0:1)]=_replacements[item];
 	    }
-	    
 	}
+	// console.log(path);
+	// console.log(_obj);
 	return extend(true,_obj,_replacements);
 }
 Replace.prototype.r=function(_rules,data,_type,_filter){
@@ -54,17 +55,18 @@ Replace.prototype.r=function(_rules,data,_type,_filter){
 		
 		switch(_type) {
 			case "css":
-				var replaceRegexp = new RegExp('((^|)\\s*url\\s*\\(\\s*["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\/\\.\\s[https|http|ftp|rtsp|mms]') + '[0-9a-zA-Z+\\-*%/\\\\<>.,;:_&^%$#@=\\?!]*\\s*["|\']?\\s*[\\)])', "g");
+				var replaceRegexp = new RegExp('((^|)\\s*url\\s*\\(\\s*["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*["|\']?\\s*[\\)])', "g");
 				data=data.replace(replaceRegexp, "$1" + _rules[dir]+"$3");
-				console.log(data.match(replaceRegexp));
-				console.log(dir);
+				
 				break;
 			case "html":
-				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\/\\.\\s[https|http|ftp|rtsp|mms]"\'') + '[0-9a-zA-Z+\\-*%/\\\\<>.,;:_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");		
+				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
+				// console.log(dir);
+				// console.log(data.match(replaceRegexp));	
 				data=data.replace(replaceRegexp, "$1" + _rules[dir] +"$4");
 				break;
 			case "js":
-				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\/\\.\\s[https|http|ftp|rtsp|mms]"\'') + '[0-9a-zA-Z+\\-*%/\\\\<>.,;:_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
+				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
 				
 				data=data.replace(replaceRegexp, "$1" + _rules[dir] +"$4");
 

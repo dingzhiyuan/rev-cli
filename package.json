@@ -15,7 +15,7 @@
     "commander": "^2.5.1",
     "md5":"2.1.0"
   },
-  "description": "rev line tool",
+  "description": "front-end web development rev commandline tool",
   "devDependencies": {},
   "directories": {},
   "dist": {
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/dingzhiyuan/rev-cli",
   "keywords": [
     "rev",
+    "front to end tool",
     "cli",
     "commandline"
   ],
@@ -45,5 +46,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.5"
+  "version": "1.0.8"
 }

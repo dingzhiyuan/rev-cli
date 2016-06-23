@@ -42,9 +42,10 @@ module.exports = function (options) {
 		// console.log("_dirPath "+_dir.replace(/^\//,""));
 		var _prefix="/";
 		var _suffix=/\./.test(_dir)?0:1;
-		_o._replacements[_prefix+getPath(_dir.replace(/^\//,""),_suffix)]=getPath(_o.replacements[_dir],_suffix);
+		_o._replacements[_prefix+(_dir.replace(/^\//,"")?getPath(_dir.replace(/^\//,""),_suffix):"")]=getPath(_o.replacements[_dir],_suffix);
 
 	}
+	// console.log(_o);
 	_o.excludes=isArray(_o.excludes)?_o.excludes:_transform(_o.excludes);
 	// 转化exclude数组成绝对路径
 	if(_o.excludes.length>0){
