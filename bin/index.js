@@ -30,42 +30,43 @@ var rev = function (_file,build,_type,_isRep,option) {
     
     var fileContent = fs.readFileSync(_file,"UTF-8");
     var matchedResult=null;
-	switch(_type) {
-		case "css":
-    		matchedResult = fileContent.match(regs.cssRegExp);
-            // console.log(matchedResult);
-			break;
-		case "html":
-    		matchedResult = fileContent.match(regs.htmlRegExp);
-            // console.log(matchedResult);
-			break;
-		case "js":
-    		matchedResult = fileContent.match(regs.htmlRegExp);
-			break;
-	}
-	if(!matchedResult){
-		writeFile();
-		return;
-	}
-	if (!version) {
-        withoutVersion();
+
+    matchedResult = fileContent.match(regs.cssRegExp);
+    if (!version) {
+        withoutVersion(matchedResult,"css");
     } else {
-        withVersion();
+        withVersion(matchedResult,"css");
     }
+
+    matchedResult = fileContent.match(regs.htmlRegExp);
+    if (!version) {
+        withoutVersion(matchedResult,"other");
+    } else {
+        withVersion(matchedResult,"other");
+    }
+
+        
+   
     writeFile();
     // Definition: 指定版本号的情况.
-    function withVersion () {
+    function withVersion (_matchedResult,_ptype) {
+        if(!_matchedResult){
+            return;
+        }
         console.log("You provided the version name \"" + version + "\", all pictures's querying param will be replaced.");
         // console.log("您指定了一个版本号，所有图片地址都将添加您指定版本号.")
-        matchedResult.forEach(function (value, index, array) {
+        _matchedResult.forEach(function (value, index, array) {
             var urlPath=value.replace(appConfig.picRepRxp,"");
-            replaceRegexpImg(urlPath,version);
+            replaceRegexpImg(urlPath,version,_ptype);
         });
     }
 
     // Definition: 没有版本号的情况. 遍历所有图片后生成 hash 并替换.
-    function withoutVersion () {
-        matchedResult.forEach(function (value, index, array) {
+    function withoutVersion (_matchedResult,_ptype) {
+        if(!_matchedResult){
+            return;
+        }
+        _matchedResult.forEach(function (value, index, array) {
              // console.log(value);
             var urlPath=value.replace(appConfig.picRepRxp,"");
             // console.log(urlPath);
@@ -124,13 +125,13 @@ var rev = function (_file,build,_type,_isRep,option) {
                picHash= new Date().getTime();
             }
             if(picHash){
-                replaceRegexpImg(urlPath,picHash);
+                replaceRegexpImg(urlPath,picHash,_ptype);
             }
         });
     }
 
-    function  replaceRegexpImg(urlPath,_version){
-    	switch(_type) {
+    function  replaceRegexpImg(urlPath,_version,_ptype){
+    	switch(_ptype) {
     		case "css":
                 // console.log(urlPath + "-----" +_version);
 				var replaceRegexp = new RegExp('('+urlPath + ')\\s*(["|\']?\\s*)[\\)]', "g");
@@ -138,14 +139,10 @@ var rev = function (_file,build,_type,_isRep,option) {
 				// 替换所有的单引号为双引号.
 				fileContent = fileContent.replace(/'/gi, "\"");
     			break;
-    		case "html":
+    		default:
 	    	var replaceRegexp = new RegExp('((^|)\\s*('+_filter+')\\s*=\\s*\\\\?["|\']?\\s*'+urlPath + ')(?![\\?|#])\\s*(\\\\?["|\'|\\s|>|/])', "g");
 				fileContent = fileContent.replace(replaceRegexp, "$1?" + _version+"$4");
-    			break;
-    		case "js":
-	    	var replaceRegexp = new RegExp('((^|)\\s*('+_filter+')\\s*=\\s*\\\\?["|\']?\\s*'+urlPath + ')(?![\\?|#])\\s*(\\\\?["|\'|\\s|>|\/>])', "g");
-				fileContent = fileContent.replace(replaceRegexp, "$1?" + _version+"$4");
-    			break;
+    		break;
     	}
 
     }

@@ -32,6 +32,7 @@ Replace.prototype.rep = function(path, build,_type,option) {
 Replace.prototype.repWithData=function(path, build,_type,option,file) {
 	var base=option.cwd,_replacements=option._replacements;
 	var _rules=this.assembly(base,path,_replacements);
+	// console.log(path+"===");
 	return this.r(_rules,file,_type,option.filter);
 }
 Replace.prototype.assembly=function(base,path,_replacements){
@@ -52,26 +53,13 @@ Replace.prototype.assembly=function(base,path,_replacements){
 Replace.prototype.r=function(_rules,data,_type,_filter){
 	for (var dir in _rules) {
 		var tmp=dir.replace(/(\/|\.|\?|\$|\||\*|\+|\^|\\|\-)/gi, "\\$1");
-		
-		switch(_type) {
-			case "css":
-				var replaceRegexp = new RegExp('((^|)\\s*url\\s*\\(\\s*["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*["|\']?\\s*[\\)])', "g");
-				data=data.replace(replaceRegexp, "$1" + _rules[dir]+"$3");
-				
-				break;
-			case "html":
-				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
-				// console.log(dir);
-				// console.log(data.match(replaceRegexp));	
-				data=data.replace(replaceRegexp, "$1" + _rules[dir] +"$4");
-				break;
-			case "js":
-				var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
-				
-				data=data.replace(replaceRegexp, "$1" + _rules[dir] +"$4");
+		var cssReplaceRegexp = new RegExp('((^|)\\s*url\\s*\\(\\s*["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*["|\']?\\s*[\\)])', "g");
+		data=data.replace(cssReplaceRegexp, "$1" + _rules[dir]+"$3");
 
-				break;
-		}
+		var replaceRegexp = new RegExp('((^|)\\s*('+_filter.join("|")+')\\s*=\\s*\\\\?["|\']?\\s*)'+ (dir!='empty'?tmp+'(':'([^\\s\\\\/:\\*\\?\\"<>\\|\']') + '(?!\\/)[0-9a-zA-Z+\\-*%/\\\\<>.,;_&^%$#@=\\?!]*\\s*\\\\?["|\'|\\s|>|\\/>])', "g");
+		// console.log(dir);
+		// console.log(data.match(replaceRegexp));	
+		data=data.replace(replaceRegexp, "$1" + _rules[dir] +"$4");
 	}
 	return data;
 }
