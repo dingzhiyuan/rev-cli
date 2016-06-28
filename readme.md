@@ -66,7 +66,7 @@ rev({
 
 `{
 	
-	base:'',//this base path relative to cwd, if it empty ,it will use the cwd as the root of the website
+	base:'',//this base path relative to cwd, if it is empty ,it will use the cwd as the root of the website
 
     dist:"rev_build",//the folder to write the rev files,beifore execute "rev" ,this folder will be clean
 
@@ -74,9 +74,17 @@ rev({
 
     version:null,
 
+    imgExts:[],
+
+    exts:[],
+
+    revExts:[],
+
+    auto:false,
+
     excludes:[]//folder or files do not execute "rev" 
 
-    propWhiteList:[],more attr to match in html and js files,defauts "src" and "href",if you want more add it
+    propWhiteList:[],more attr to match in html and js files,defauts "src" and "href",if you want more ,add it
 
     repExcludes:[],//folder or files do not execute "replace url" 
 
@@ -105,3 +113,9 @@ and we have a "index.html" and "xxx/index.html" in the root folder,also style fo
 it will replace all "style/" and "/style/" as "http://www.xxx.com/style/" in "index.html"
 
 it will replace all "../style/" and "/style/" as "http://www.xxx.com/style/" in "xxx/index.html"
+
+
+##V1.0.9 bugFix
+
+A contain B , and B contain C; if C change, B will change,but A dose not change, we fix it.
+

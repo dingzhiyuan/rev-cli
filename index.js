@@ -13,11 +13,22 @@ module.exports = function (options) {
 	    propWhiteList:[],
 	    excludes:[],
 	    repExcludes:[],
+	    imgExts:[],
+	    exts:[],
+	    revExts:[],
+	    auto:false,
 	    replacements:{
 
 	    }
 	},_o={},build_path,_paths={css:[],js:[],html:[]}; 
 	_o=options?extend(true,defaults,options):defaults;
+	_o.imgExts=combineInto(_o.imgExts,['jpg','gif','bmp','png','webp','svg','eot','woff','ttf']);
+	_o.exts=combineInto(_o.exts,['css','js']);
+	_o.exts=combineInto(_o.exts,_o.imgExts);
+	_o.extsReg=_o.exts.join("|");
+	_o.blockingQueue={};
+	_o.queue={};
+	_o.revExts=combineInto(_o.revExts,['css','js','html']);
 	_o.sourceMap={};
 	_o.filter=["src","href"];
 	if(_o.propWhiteList.length>0){
@@ -46,6 +57,7 @@ module.exports = function (options) {
 
 	}
 	// console.log(_o);
+	// return;
 	_o.excludes=isArray(_o.excludes)?_o.excludes:_transform(_o.excludes);
 	// 转化exclude数组成绝对路径
 	if(_o.excludes.length>0){
@@ -114,59 +126,29 @@ module.exports = function (options) {
                 }else{
                 	_isRev=!_isRev?_isRev:(getItem(_o.excludes,getPath(path,0))>-1?false:true);
 	           		_isRep=!_isRep?_isRep:(getItem(_o.repExcludes,getPath(path,0))>-1?false:true);
-	           		
-                    if(node_path.extname(path)==".css"){
-                       _o.sourceMap[path]=createPicHash(path);
-                       _paths.css.push(path);
+	           		var _ext=node_path.extname(path).toLowerCase().replace(/\./g,"");
+                    if(getItem(_o.revExts,_ext)>-1){
+                       // _o.sourceMap[path]=createPicHash(path);
+                       // _paths.css.push(path);
+                       // console.log(_ext);
                        if(_isRev){
 	                       	process.nextTick(function(){
-	                       		ver(path,build,"css",_isRep,_o);
+	                       		ver(path,build,_ext,_isRep,_o);
 	                       });
 	                    }else{
 	                    	if(_isRep){
 		                    	process.nextTick(function(){
-		                    		dirReplace.rep(path, build,"css",_o);
+		                    		dirReplace.rep(path, build,_ext,_o);
 		                    	});
 		                    }
 	                    }
                        
-                    }else if(node_path.extname(path)==".js"){
-                    	_o.sourceMap[path]=createPicHash(path);
-                       _paths.js.push(path);
-                       if(_isRev){
-	                       	process.nextTick(function(){
-	                       		ver(path,build,"js",_isRep,_o);
-	                       });
-	                    }else{
-	                    	if(_isRep){
-		                    	process.nextTick(function(){
-		                    		dirReplace.rep(path, build,"js",_o);
-		                    	});
-		                    }
-	                    }
-                    }
-                    else if(node_path.extname(path)==".html"){
-                       _paths.html.push(path);
-                       if(_isRev){
-	                       	process.nextTick(function(){
-	                       		ver(path,build,"html",_isRep,_o);
-	                       });
-	                    }else{
-	                    	if(_isRep){
-		                    	process.nextTick(function(){
-		                    		dirReplace.rep(path, build,"html",_o);
-		                    	});
-		                    }
-	                    }
-                      
-                    }
-                    else if(node_path.extname(path).toLowerCase().match("(jpg|gif|bmp|png|webp|svg|eot|woff|ttf)")){
+                    }else if(getItem(_o.imgExts,_ext)>-1){
                     	// console.log(path);
                     	// console.log("image....");
                     	_o.sourceMap[path]=createPicHash(path);
                     	copyFile(path,build);
                     }else{
-						
                     	copyFile(path,build);
                     }
                     
@@ -261,7 +243,7 @@ function createPicHash (path) {
         // console.log('文件 "' + path + '" 不存在, 将跳过版本号添加.');        
         return "";
     }
-    return md5(fs.readFileSync(path)).substr(0, 6);
+    return md5(fs.readFileSync(path)).substr(0, 8);
 }
 
 function getPropertyCount(o){
@@ -272,4 +254,11 @@ function getPropertyCount(o){
       }
    }
    return count;
+}
+
+function combineInto(a,b){
+	for (var i=0; i < b.length; i++) {
+		a.push( b[i] );
+	}
+	return a;
 }
