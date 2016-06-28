@@ -121,8 +121,8 @@ module.exports = function (options) {
 						if(err){
 							throw err;
 						}
+						readFile(path,build,_isRevv,_isRepv);
 					});
-                   readFile(path,build,_isRevv,_isRepv);
                 }else{
                 	_isRev=!_isRev?_isRev:(getItem(_o.excludes,getPath(path,0))>-1?false:true);
 	           		_isRep=!_isRep?_isRep:(getItem(_o.repExcludes,getPath(path,0))>-1?false:true);
