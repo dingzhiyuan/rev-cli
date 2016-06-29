@@ -11,7 +11,7 @@ Replace.prototype.init=function(){
 Replace.prototype.rep = function(path, build,_type,option) {
 	var base=option.cwd,_replacements=option._replacements,_filter=option.filter;
 	var _rules=this.assembly(base,path,_replacements),_me=this;
-	console.log(_rules);
+	// console.log(_rules);
 	fs.readFile(path,function(err, data){
 		if(err){
 			console.error("read file "+path+" error:"+err);
